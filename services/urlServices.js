@@ -1,6 +1,6 @@
 import { addMinutes } from '../utils/timeUtils.js';
 
-const urlStore = new Map();
+export const urlStore = new Map();
 
 export function createShortUrlEntry(originalUrl, shortId, validityMinutes = 30) {
     const createdAt = new Date();

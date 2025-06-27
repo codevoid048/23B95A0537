@@ -30,6 +30,6 @@ export const getNewAccessToken = async (req, res) => {
     }
     catch (error) {
         console.log("Error Fetching Access Token : ", error);
-        return res.status(400).send("message : Error Fetching Access Token");
+        //return res.status(400).send("message : Error Fetching Access Token");
     }
 }

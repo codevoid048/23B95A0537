@@ -2,6 +2,7 @@ import { nanoid } from "nanoid";
 import { createShortUrlEntry, getUrlData, logClick, isShortUrlExists } from "../services/urlServices.js";
 import { isExpired } from "../utils/timeUtils.js";
 import { log } from "../middlewares/logger.js";
+import { urlInputSchema } from "../services/urlSchema.js";
 
 const BASE_URL = "http://localhost:3000";
 
@@ -14,7 +15,8 @@ function generateUniqueShortcode() {
 }
 
 export const createShortUrl = async (req, res) => {
-    const { url, validity = 30, shortcode } = req.body;
+    const parsed = urlInputSchema.parse(req.body);
+    const { url, validity , shortcode } = parsed;
 
     if (!url) {
         await log({ stack: "backend", level: "error", pkg: "controller", message: "URL missing in Req" });
