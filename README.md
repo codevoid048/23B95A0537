@@ -11,6 +11,41 @@ A simple URL shortener service built with Node.js and Express. It allows users t
 - Rate limiting to prevent abuse
 - Logging for key events and errors
 
+## System Design Architecture
+
+```mermaid
+flowchart TD
+    Client["Client (Browser/Postman)"]
+    API["Express Server (server.js)"]
+    Routes["Routes (/routes/urlRoutes.js)"]
+    Controllers["Controllers (/controllers/urlControllers.js)"]
+    Services["Services (/services/urlServices.js)"]
+    Store["In-Memory Store (Map)"]
+    Utils["Utils (cleanup, time, etc.)"]
+    Middleware["Middleware (Logger, RateLimiter)"]
+
+    Client -->|HTTP Requests| API
+    API --> Middleware
+    Middleware --> Routes
+    Routes --> Controllers
+    Controllers --> Services
+    Services --> Store
+    Controllers --> Utils
+    API -->|Scheduled Task| Utils
+```
+
+### Component Breakdown
+
+- **Client:** Sends HTTP requests to the server (e.g., to create or access short URLs).
+- **Express Server (`server.js`):** Entry point, sets up middleware, routes, and background tasks.
+- **Middleware:** Handles logging and rate limiting for incoming requests.
+- **Routes:** Maps HTTP endpoints to controller functions.
+- **Controllers:** Contains business logic for creating, retrieving, and redirecting short URLs.
+- **Services:** Manages the in-memory store and URL data operations.
+- **In-Memory Store:** Stores all short URL data (Map object).
+- **Utils:** Provides utility functions (e.g., cleanup of expired links, time calculations).
+- **Background Task:** Periodically cleans up expired links using a scheduled function.
+
 ## Folder Structure
 ```
 .
@@ -92,4 +127,3 @@ The server exposes the following endpoints:
 
 ## Notes
 - All data is stored in memory; restarting the server will clear all short URLs.
-- For production, consider using a persistent database and external cache. 
