@@ -1,7 +1,3 @@
-export function formatDate(date) {
-    return new Date(date).toISOString();
-}
-
 export function isExpired(expiresAt) {
     return new Date() > new Date(expiresAt);
 }
